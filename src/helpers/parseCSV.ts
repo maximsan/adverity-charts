@@ -17,4 +17,5 @@ export function parseCSV(file: string): AdData[] {
       };
 
       return [...accum, map];
-    }, []);}
+    }, []);
+}
