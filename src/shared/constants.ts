@@ -1,7 +1,6 @@
 import { Option } from '../components/MultiSelect/MultiSelect';
 
-export const url = `http://adverity-challenge.s3-website-eu-west-1.amazonaws.com/
-DAMKBAoDBwoDBAkOBAYFCw.csv`;
+export const url = process.env.REACT_APP_DATA_URL || "";
 
 export const AllOption: Option = {
   id: 'all-id',

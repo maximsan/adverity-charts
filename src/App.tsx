@@ -9,6 +9,8 @@ import {fetchCSVData} from "./helpers/fetchCSVData";
 import {filterBy} from "./helpers/filterBy";
 import {Header} from "./components/Header/Header";
 
+require('dotenv').config();
+
 export const App = () => {
     const [data, setData] = useState<AdData[]>([]);
     const [filteredData, setFilteredData] = useState<AdData[] | undefined>([]);
