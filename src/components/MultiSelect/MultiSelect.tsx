@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FormControl, FormLabel, IconButton, TextField, StandardTextFieldProps } from '@material-ui/core';
 import Restore from '@material-ui/icons/Restore';
 import { Autocomplete } from '@material-ui/lab';
-import { Tag } from '../Tag';
+import { Tag } from '../Tag/Tag';
 import {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,

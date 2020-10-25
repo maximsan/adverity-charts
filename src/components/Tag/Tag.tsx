@@ -27,10 +27,6 @@ const StyledTag = styled(TagComponent)({
   padding: '0 10px',
   outline: 0,
   overflow: 'hidden',
-  '&:focus': {
-    // borderColor: Colors.brandColor,
-    // backgroundColor: Colors.hoverBrandColor,
-  },
   '& span': {
     overflow: 'hidden',
     whiteSpace: 'nowrap',
