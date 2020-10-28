@@ -1,15 +1,14 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {CartesianGrid, Label, Legend, Line, LineChart, XAxis, YAxis} from 'recharts';
 import {AdData} from '../../types';
-import {FilterKey, FilterType} from '../../shared/types';
-import {getUnicData} from '../../helpers/getUnicData';
+import {FilterType} from '../../shared/types';
 import {cTickFormatter, iTickFormatter} from './tickFormatter';
 import {createChartHeader} from './createChartHeader';
-import _ from 'lodash';
 import {useStyles} from './styles';
 import {Spinner} from '../Spinner/Spinner';
+import {useChartData} from "./useChartData";
 
 export interface ChartOptions {
     filteredData: AdData[] | undefined;
@@ -17,39 +16,9 @@ export interface ChartOptions {
 }
 
 export const Chart: FC<ChartOptions> = ({filteredData, filters}) => {
-    const [chartData, setChartData] = useState();
-    const [clicksMax, setClicksMax] = useState();
-    const [impressionsMax, setImpressionsMax] = useState();
-
     const {paper, header} = useStyles();
 
-    useEffect(() => {
-        if (filteredData?.length) {
-            createChartData(filteredData);
-        }
-    }, [filteredData]);
-
-    const createChartData = (data: AdData[]) => {
-        const clicks = getUnicData(data, FilterKey.CLICKS).map((v) => parseInt(v));
-        const maxClicks = _.max(clicks);
-        const roundMaxClicks = _.round(maxClicks! + 0.01 * maxClicks!);
-        setClicksMax(roundMaxClicks);
-
-        const impressions = getUnicData(data, FilterKey.IMPRESSIONS).map((v) => parseInt(v));
-        const maxImpressions = _.max(impressions);
-        const roundMaxImpressions = _.round(maxImpressions! + 0.01 * maxImpressions!);
-        setImpressionsMax(roundMaxImpressions);
-
-        const chartData = data.map(({date, clicks, impressions}) => {
-            return {
-                name: date,
-                c: clicks,
-                i: impressions,
-            };
-        });
-
-        setChartData(chartData);
-    };
+    const {chartData, clicksMax, impressionsMax} = useChartData(filteredData);
 
     if (!chartData?.length) {
         return <Spinner/>;
@@ -74,11 +43,11 @@ export const Chart: FC<ChartOptions> = ({filteredData, filters}) => {
                 <Line dataKey="c" dot={false} name="clicks" stroke="blue"/>
                 <YAxis
                     dataKey="c"
-                    domain={[0, clicksMax]}
+                    domain={[0, clicksMax!]}
                     tickSize={0}
                     tickMargin={10}
                     tickCount={10}
-                    tickFormatter={cTickFormatter(clicksMax)}
+                    tickFormatter={cTickFormatter(clicksMax!)}
                 >
                     <Label
                         value="Clicks"
@@ -92,13 +61,13 @@ export const Chart: FC<ChartOptions> = ({filteredData, filters}) => {
                 <Line dataKey="i" dot={false} name="impressions" stroke="red" yAxisId="right"/>
                 <YAxis
                     dataKey="i"
-                    domain={[0, impressionsMax]}
+                    domain={[0, impressionsMax!]}
                     yAxisId="right"
                     orientation="right"
                     tickSize={0}
                     tickMargin={10}
                     tickCount={10}
-                    tickFormatter={iTickFormatter(impressionsMax)}
+                    tickFormatter={iTickFormatter(impressionsMax!)}
                 >
                     <Label
                         value="Impressions"
