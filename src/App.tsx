@@ -55,7 +55,6 @@ export const App = () => {
             <Grid item xs={12}>
                 <Header/>
             </Grid>
-
             <Grid item xs={12} md={3}>
                 <Filter data={data} applyFilter={applyFilters} filters={filters} setFilters={setFilters}/>
             </Grid>
