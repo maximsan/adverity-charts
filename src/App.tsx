@@ -35,17 +35,15 @@ export const App = () => {
         if (filters[FilterKey.DATA_SOURCE].includes(ALL) && filters[FilterKey.CAMPAIGN].includes(ALL)) {
             const restoredData = filterBy(data, filters);
             setFilteredData(restoredData);
-        } else if (
-            (filters[FilterKey.DATA_SOURCE].includes(ALL) && !filters[FilterKey.CAMPAIGN].includes(ALL)) ||
-            (filters[FilterKey.CAMPAIGN].includes(ALL) && !filters[FilterKey.DATA_SOURCE].includes(ALL))
-        ) {
-            return;
         }
     }, [data, filters]);
 
-    const filterData = useMemo(() => (data: AdData[], filters: FilterType) => {
-        return filterBy(data, filters)
-    }, []);
+    const filterData = useMemo(
+        () => (data: AdData[], filters: FilterType) => {
+            return filterBy(data, filters);
+        },
+        []
+    );
 
     const applyFilters = (filters: FilterType) => {
         const filteredData = filterData(data, filters);
