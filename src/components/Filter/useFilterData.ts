@@ -9,7 +9,7 @@ export const useFilterData: UseFilterData = (data) => {
   const [campaigns, setCampaigns] = useState<string[]>([]);
 
   useEffect(() => {
-    if (data.length) {
+    if (data?.length) {
       setDataSources(
         _.uniqBy<AdData>(data, 'dataSource')
           .map(({ dataSource }) => dataSource)
