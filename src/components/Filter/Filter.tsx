@@ -37,12 +37,16 @@ export const Filter: FC<FilterProps> = ({ applyFilter, setFilters, filters, data
             [name]: options,
         }));
 
+        console.log('Filter change setValue', `name: ${name}`, options);
+
         const filterValues = options.map(({ name }) => name);
 
         setFilters((values) => ({
             ...values,
             [name]: filterValues,
         }));
+
+        console.log('Filter change setFilters', filterValues);
     };
 
     const restoreOptions = (name: string) => async () => {

@@ -53,10 +53,10 @@ export const App = () => {
             <Grid item xs={12} md={3}>
                 <Filter
                     data={cachedData}
-                    applyFilter={applyFilters}
+                    refetch={fetchData}
                     filters={filters}
                     setFilters={setFilters}
-                    refetch={fetchData}
+                    applyFilter={applyFilters}
                 />
             </Grid>
             <Grid item xs={12} md={9}>

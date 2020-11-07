@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { MultiSelect, Option } from '../MultiSelect/MultiSelect';
 import { ApplyButton } from '../Button/ApplyButton';
-import { ALL, AllOption } from '../../shared/constants';
+import { ALL } from '../../shared/constants';
 import { useStyles } from './styles';
 import { FilterKey, FilterType } from '../../shared/types';
 import { useFilterData } from './useFilterData';
@@ -47,20 +47,6 @@ export const FilterList: FC<FilterListProps> = ({
         applyFilter(filters);
     };
 
-    const createOptions = (data: string[]): Option[] => {
-        console.log('create filter options', data);
-        return [
-            AllOption,
-            ...data.map((item) => {
-                return {
-                    id: `${item}-id`,
-                    name: item,
-                    value: item,
-                };
-            }),
-        ];
-    };
-
     return (
         <>
             <Grid container alignItems="center" justify="space-between" item xs={12} className={gridItem}>
@@ -72,7 +58,7 @@ export const FilterList: FC<FilterListProps> = ({
                         value={dataSource}
                         onChange={onChange}
                         restoreOptions={restoreOptions}
-                        options={createOptions(dataSources)}
+                        options={dataSources}
                     />
                 </Grid>
                 <Grid item xs={2}>
@@ -89,7 +75,7 @@ export const FilterList: FC<FilterListProps> = ({
                         value={campaign}
                         onChange={onChange}
                         restoreOptions={restoreOptions}
-                        options={createOptions(campaigns)}
+                        options={campaigns}
                     />
                 </Grid>
             </Grid>
