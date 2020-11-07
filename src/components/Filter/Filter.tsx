@@ -10,69 +10,75 @@ import { useStyles } from './styles';
 import { FilterList } from './FilterList';
 
 export interface FilterProps {
-  data: AdData[];
-  applyFilter: (filters: FilterType) => void;
-  setFilters: Dispatch<SetStateAction<FilterType>>;
-  filters: FilterType;
+    data: AdData[];
+    applyFilter: (filters: FilterType) => void;
+    setFilters: Dispatch<SetStateAction<FilterType>>;
+    filters: FilterType;
+    refetch: () => Promise<void>;
 }
 
 export interface State {
-  campaign: Option[];
-  dataSource: Option[];
+    campaign: Option[];
+    dataSource: Option[];
 }
 
-export const Filter: FC<FilterProps> = ({ applyFilter, setFilters, filters, data }) => {
-  const { paper } = useStyles();
-
-  const [{ campaign, dataSource }, setValue] = useState<State>({
+const optionsState = {
     campaign: [AllOption],
     dataSource: [AllOption],
-  });
+};
 
-  const onChange = (name: string, options: Option[]) => {
-    setValue((values) => ({
-      ...values,
-      [name]: options,
-    }));
+export const Filter: FC<FilterProps> = ({ applyFilter, setFilters, filters, data, refetch }) => {
+    const { paper } = useStyles();
+    const [{ campaign, dataSource }, setValue] = useState<State>(optionsState);
 
-    const filterValues = options.map(({ name }) => name);
+    const onChange = async (name: string, options: Option[]) => {
+        setValue((values) => ({
+            ...values,
+            [name]: options,
+        }));
 
-    setFilters((values) => ({
-      ...values,
-      [name]: filterValues,
-    }));
-  };
+        const filterValues = options.map(({ name }) => name);
 
-  const restoreOptions = (name: string) => () => {
-    setValue((values) => ({
-      ...values,
-      [name]: [AllOption],
-    }));
+        setFilters((values) => ({
+            ...values,
+            [name]: filterValues,
+        }));
+    };
 
-    setFilters((values) => ({
-      ...values,
-      [name]: [ALL],
-    }));
-  };
+    const restoreOptions = (name: string) => async () => {
+        setValue((values) => ({
+            ...values,
+            [name]: [AllOption],
+        }));
 
-  return (
-    <Paper variant="outlined" className={paper}>
-      <Grid container>
-        <Grid container item xs={12}>
-          <Typography variant="h6">Filter dimension values</Typography>
-        </Grid>
-        <Grid container direction="column" wrap="nowrap" item xs={12}>
-          <FilterList
-            filters={filters}
-            data={data}
-            dataSource={dataSource}
-            campaign={campaign}
-            applyFilter={applyFilter}
-            onChange={onChange}
-            restoreOptions={restoreOptions}
-          />
-        </Grid>
-      </Grid>
-    </Paper>
-  );
+        setFilters((values) => ({
+            ...values,
+            [name]: [ALL],
+        }));
+
+        await refetch();
+    };
+
+    return (
+        <Paper variant="outlined" className={paper}>
+            <Grid container>
+                <Grid container item xs={12}>
+                    <Typography variant="h6">Filter dimension values</Typography>
+                </Grid>
+                <Grid container direction="column" wrap="nowrap" item xs={12}>
+                    {!!data?.length && (
+                        <FilterList
+                            filters={filters}
+                            data={data}
+                            dataSource={dataSource}
+                            campaign={campaign}
+                            applyFilter={applyFilter}
+                            onChange={onChange}
+                            restoreOptions={restoreOptions}
+                        />
+                    )}
+                </Grid>
+            </Grid>
+        </Paper>
+    );
 };
